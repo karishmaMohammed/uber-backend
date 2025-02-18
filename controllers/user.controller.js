@@ -34,7 +34,7 @@ registerUser = async (req, res, next) => {
 
 }
 
-loginUser = async(req, res, next) =>{
+loginUser = async (req, res, next) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -44,13 +44,13 @@ loginUser = async(req, res, next) =>{
     const { email, password } = req.body;
 
     const user = await userModel.findOne({ email }).select('+password');
-    if(!user){
-        return res.status(400).json({message: 'Invalid email or password'});
+    if (!user) {
+        return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     const isPasswordMatch = await user.comparePassword(password);
-    if(!isPasswordMatch){
-        return res.status(400).json({message: 'Invalid email or password'});
+    if (!isPasswordMatch) {
+        return res.status(400).json({ message: 'Invalid email or password' });
     }
 
     const token = user.generateAuthenticationToken();
@@ -61,8 +61,12 @@ loginUser = async(req, res, next) =>{
 
 }
 
+getUserProfile = async (req, res, next) => {
 
+    res.status(200).json(req.user);
+}
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    getUserProfile
 }
